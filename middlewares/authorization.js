@@ -1,4 +1,4 @@
-import { sendJSON } from '../helpers/sendJSON'
+import { sendJSON } from '../helpers/sendJSON.js'
 
 export const authorizationMiddleware = (allowedRoles = []) => {
   return (req, res) => {

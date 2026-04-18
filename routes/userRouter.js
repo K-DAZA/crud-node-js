@@ -1,4 +1,5 @@
 import { sendJSON } from '../helpers/sendJSON.js'
+import { authorizationMiddleware } from '../middlewares/authorization.js'
 import { createUser, getAllUsers, getUser } from '../models/user.js'
 import { parserBody } from '../utils/parserBody.js'
 
@@ -20,10 +21,12 @@ export const userRouter = async (req, res) => {
   }
 
   if (segments.length === 1 && req.method === 'POST') {
+    if (!authorizationMiddleware(['admin'])(req, res)) return
+
     const body = await parserBody(req)
     const { name, email } = body
 
-    if (!name) {
+    if (!name || !email) {
       return sendJSON(res, 400, { message: 'Name/Email are required' })
     }
 

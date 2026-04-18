@@ -22,6 +22,20 @@ export const getAuthUserById = (id) => {
 }
 
 /**
+ * Below code is related to active tokens, but since we are using in-memory storage, it will be lost when the server restarts.
+ * In a real application, you would store active tokens in a database or cache.
+ */
+const activeTokens = new Map()
+
+export const addActiveToken = (token, metadata) => {
+  activeTokens.set(token, metadata)
+}
+
+export const getActiveToken = (token) => {
+  return activeTokens.get(token)
+}
+
+/**
  * Below code is related to revoke tokens, but since we are using in-memory storage, it will be lost when the server restarts.
  * In a real application, you would store revoked tokens in a database or cache.
  */

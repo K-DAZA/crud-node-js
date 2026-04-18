@@ -1,7 +1,7 @@
 import { verifyPassword } from '../helpers/hashPassword.js'
 import { sendJSON } from '../helpers/sendJSON.js'
 import { authMiddleware } from '../middlewares/authentication.js'
-import { addRevokedToken, createAuthUser, getAuthUser, isTokenRevoked } from '../models/auth.js'
+import { addActiveToken, addRevokedToken, createAuthUser, getAuthUser, isTokenRevoked } from '../models/auth.js'
 import { parserBody } from '../utils/parserBody.js'
 import crypto from 'node:crypto'
 
@@ -13,7 +13,8 @@ export const authRouter = async (req, res) => {
     const body = await parserBody(req)
     const { email, password, role } = body
 
-    if (getAuthUser(email)) {
+    const authUser = getAuthUser(email)
+    if (authUser) {
       return sendJSON(res, 400, { message: 'Email already exists' })
     }
 
@@ -29,18 +30,27 @@ export const authRouter = async (req, res) => {
     const body = await parserBody(req)
     const { email, password } = body
 
-    if (!email || !password) {
-      return sendJSON(res, 400, { message: 'Email and password are required' })
+    if (!email) {
+      return sendJSON(res, 400, { message: 'Email is required' })
+    }
+
+    if (!password) {
+      return sendJSON(res, 400, { message: 'Password is required' })
     }
 
     try {
       const user = getAuthUser(email)
-
       if (!user || !verifyPassword(password, user.password)) {
         return sendJSON(res, 401, { message: 'Invalid email or password' })
       }
 
       const token = `user_${user.id}_${crypto.randomUUID()}`
+      const tokenMetadata = {
+        userId: user.id,
+        expiredAt: new Date(Date.now() + 60 * 60 * 1000).toISOString() // Token expires in 1 hour
+      }
+
+      addActiveToken(token, tokenMetadata)
       return sendJSON(res, 200, { message: 'Login successful', token })
     } catch (error) {
       return sendJSON(res, 500, { message: 'Internal Server Error' })

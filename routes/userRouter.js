@@ -26,12 +26,17 @@ export const userRouter = async (req, res) => {
     const body = await parserBody(req)
     const { name, email } = body
 
-    if (!name || !email) {
-      return sendJSON(res, 400, { message: 'Name/Email are required' })
+    if (!name) {
+      return sendJSON(res, 400, { message: 'Name is required' })
+    }
+
+    if (!email) {
+      return sendJSON(res, 400, { message: 'Email is required' })
     }
 
     const newUser = { name, email }
     createUser(newUser)
+
     return sendJSON(res, 201, { message: 'User created successfully', user: newUser })
   }
 

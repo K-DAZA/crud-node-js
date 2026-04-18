@@ -1,7 +1,7 @@
 import http from 'node:http'
 import { userRouter } from './routes/userRouter.js'
 import { authRouter } from './routes/authRouter.js'
-import { authMiddleware } from './middleware/authentication.js'
+import { authMiddleware } from './middlewares/authentication.js'
 
 const PORT = process.env.PORT || 3000
 

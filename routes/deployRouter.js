@@ -27,7 +27,7 @@ export const deployRouter = async (req, res) => {
           return res.end('Ignored: not main branch')
         }
 
-        exec('cd /ruta/a/tu/proyecto && git pull origin main && pm2 restart server', (err, stdout, stderr) => {
+        exec('cd /root/repos/crud-node-js && git pull origin main && pm2 restart server', (err, stdout, stderr) => {
           if (err) {
             console.error(err)
             res.writeHead(500)

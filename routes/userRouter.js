@@ -36,7 +36,6 @@ export const userRouter = async (req, res) => {
 
     const newUser = { name, email }
     createUser(newUser)
-
     return sendJSON(res, 201, { message: 'User created successfully', user: newUser })
   }
 

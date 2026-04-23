@@ -2,6 +2,7 @@ import http from 'node:http'
 import { userRouter } from './routes/userRouter.js'
 import { authRouter } from './routes/authRouter.js'
 import { authMiddleware } from './middlewares/authentication.js'
+import { deployRouter } from './routes/deployRouter.js'
 
 const PORT = process.env.PORT || 3000
 
@@ -16,6 +17,11 @@ const processRequest = (req, res) => {
     if (!auth) return
 
     userRouter(req, res)
+  }
+
+  // Management CI/CD flow
+  if (req.url.startsWith('/deploy')) {
+    deployRouter(req, res)
   }
 }
 

@@ -43,5 +43,9 @@ export const deployRouter = async (req, res) => {
         res.end('Invalid payload')
       }
     })
+    return
   }
+
+  res.writeHead(404)
+  return res.end('Not Found')
 }

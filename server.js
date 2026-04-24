@@ -21,7 +21,7 @@ const processRequest = (req, res) => {
 
   // Management CI/CD flow
   if (req.url.startsWith('/deploy')) {
-    deployRouter(req, res)
+    return deployRouter(req, res)
   }
 }
 

@@ -22,7 +22,7 @@ export const deployRouter = (req, res) => {
         }
 
         const hmac = crypto
-          .createHmac('sha256', 'secret-webhook-node') // SECRET
+          .createHmac('sha256', 'secret-webhook-node') // SECRET WEBHOOK KEY
           .update(rawBody)
           .digest('hex')
 
